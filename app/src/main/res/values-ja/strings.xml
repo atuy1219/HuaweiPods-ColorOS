@@ -88,7 +88,7 @@
     <string name="official_image_request_started">ダウンロードを開始しました。完了すると画像が自動更新されます</string>
     <string name="theme_title">テーマ</string>
     <string name="theme_follow_system">システムに従う</string>
-    <string name="theme_light">弱</string>
+    <string name="theme_light">ライト</string>
     <string name="theme_dark">ダーク</string>
     <string name="theme_color">テーマカラー</string>
     <string name="theme_color_summary">アプリのアクセントカラーを選択します</string>
@@ -422,4 +422,7 @@
     <string name="freeclip2_settings_unknown">イヤホンの状態を取得できません。更新して再試行してください</string>
     <string name="freeclip2_write_unconfirmed">設定を確認できませんでした。状態を更新して再試行してください</string>
     <string name="language_japanese">日本語</string>
+    <string name="official_image_load_failed">公式リソースを読み込めませんでした。タップして再試行してください</string>
+    <string name="official_image_select_color_hint">HUAWEI公式のリソース設定に基づく色名です。お使いの製品に合う色を選んでください</string>
+    <string name="official_image_request_failed">ダウンロードを開始できませんでした。後でもう一度お試しください</string>
 </resources>

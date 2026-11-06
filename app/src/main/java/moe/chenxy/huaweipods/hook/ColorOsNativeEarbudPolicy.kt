@@ -47,15 +47,32 @@ internal fun colorOsQuickToggleLabel(
     toggle: ColorOsQuickToggle,
     enabled: Boolean?,
     chinese: Boolean,
+    japanese: Boolean = false,
 ): String {
     val name = when (toggle) {
-        ColorOsQuickToggle.LOW_LATENCY -> if (chinese) "低时延" else "Low latency"
-        ColorOsQuickToggle.WEAR_DETECTION -> if (chinese) "佩戴检测" else "Wear detection"
+        ColorOsQuickToggle.LOW_LATENCY -> when {
+            japanese -> "低遅延"
+            chinese -> "低时延"
+            else -> "Low latency"
+        }
+        ColorOsQuickToggle.WEAR_DETECTION -> when {
+            japanese -> "装着検出"
+            chinese -> "佩戴检测"
+            else -> "Wear detection"
+        }
     }
     val state = when (enabled) {
-        true -> if (chinese) "已开启" else "On"
-        false -> if (chinese) "已关闭" else "Off"
-        null -> if (chinese) "读取中" else "…"
+        true -> when {
+            japanese -> "オン"
+            chinese -> "已开启"
+            else -> "On"
+        }
+        false -> when {
+            japanese -> "オフ"
+            chinese -> "已关闭"
+            else -> "Off"
+        }
+        null -> if (japanese) "読込中" else if (chinese) "读取中" else "…"
     }
     return "$name · $state"
 }

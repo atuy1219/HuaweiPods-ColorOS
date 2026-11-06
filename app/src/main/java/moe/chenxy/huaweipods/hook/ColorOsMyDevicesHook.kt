@@ -354,12 +354,10 @@ object ColorOsMyDevicesHook : HookContext() {
         row.isEnabled = true
         row.alpha = 1f
         row.contentDescription = "HuaweiPods, $deviceName"
-        val summaryText = summary ?: if (
-            Locale.getDefault().language == Locale.CHINESE.language
-        ) {
-            "$deviceName 电量与设置"
-        } else {
-            "$deviceName battery and settings"
+        val summaryText = summary ?: when (Locale.getDefault().language) {
+            Locale.CHINESE.language -> "$deviceName 电量与设置"
+            Locale.JAPANESE.language -> "$deviceName の電池残量と設定"
+            else -> "$deviceName battery and settings"
         }
         val title = row.findViewById<TextView>(android.R.id.title)
         val summaryView = row.findViewById<TextView>(android.R.id.summary)
@@ -766,17 +764,33 @@ object ColorOsMyDevicesHook : HookContext() {
     }
 
     private fun ancLabel(mode: NoiseControlMode): String {
-        val chinese = Locale.getDefault().language == Locale.CHINESE.language
+        val lang = Locale.getDefault().language
         return when (mode) {
-            NoiseControlMode.OFF -> if (chinese) "关闭" else "Off"
-            NoiseControlMode.NOISE_CANCELLATION -> if (chinese) "降噪" else "Noise cancelling"
-            NoiseControlMode.TRANSPARENCY -> if (chinese) "通透" else "Awareness"
+            NoiseControlMode.OFF -> when (lang) {
+                Locale.CHINESE.language -> "关闭"
+                Locale.JAPANESE.language -> "オフ"
+                else -> "Off"
+            }
+            NoiseControlMode.NOISE_CANCELLATION -> when (lang) {
+                Locale.CHINESE.language -> "降噪"
+                Locale.JAPANESE.language -> "ノイズキャンセリング"
+                else -> "Noise cancelling"
+            }
+            NoiseControlMode.TRANSPARENCY -> when (lang) {
+                Locale.CHINESE.language -> "通透"
+                Locale.JAPANESE.language -> "外音取り込み"
+                else -> "Awareness"
+            }
             NoiseControlMode.UNKNOWN -> ""
         }
     }
 
     private fun toggleLabel(toggle: ColorOsQuickToggle, enabled: Boolean?): String =
-        colorOsQuickToggleLabel(toggle, enabled, Locale.getDefault().language == Locale.CHINESE.language)
+        colorOsQuickToggleLabel(
+            toggle, enabled,
+            chinese = Locale.getDefault().language == Locale.CHINESE.language,
+            japanese = Locale.getDefault().language == Locale.JAPANESE.language,
+        )
 
     private fun NoiseControlMode.isKnownMode(): Boolean = this != NoiseControlMode.UNKNOWN
 

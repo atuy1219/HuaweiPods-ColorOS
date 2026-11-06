@@ -10,6 +10,13 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class ColorOsNativeEarbudPolicyTest {
+
+    @Test
+    fun `japanese system quick controls use japanese labels`() {
+        assertEquals("低遅延 · オン", colorOsQuickToggleLabel(ColorOsQuickToggle.LOW_LATENCY, true, false, japanese = true))
+        assertEquals("装着検出 · 読込中", colorOsQuickToggleLabel(ColorOsQuickToggle.WEAR_DETECTION, null, false, japanese = true))
+    }
+
     private val worn = PodParams(battery = 70, isConnected = true)
     private val charging = PodParams(battery = 70, isCharging = true, isConnected = true)
 
