@@ -61,6 +61,7 @@ fun SettingsPage(
         stringResource(R.string.language_system),
         stringResource(R.string.language_chinese),
         stringResource(R.string.language_english),
+        stringResource(R.string.language_japanese),
     )
     val logLevelValues = listOf(ConfigManager.LOG_LEVEL_OFF, ConfigManager.LOG_LEVEL_BASIC, ConfigManager.LOG_LEVEL_DEBUG)
     val logLevelOptions = listOf(

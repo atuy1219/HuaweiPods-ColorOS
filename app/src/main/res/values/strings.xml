@@ -106,6 +106,7 @@
     <string name="language_system">Follow System</string>
     <string name="language_chinese">Simplified Chinese</string>
     <string name="language_english">English</string>
+    <string name="language_japanese">Japanese</string>
     <string name="log_level">Log Level</string>
     <string name="log_level_summary">Control Xposed module log output</string>
     <string name="log_level_off">Off</string>

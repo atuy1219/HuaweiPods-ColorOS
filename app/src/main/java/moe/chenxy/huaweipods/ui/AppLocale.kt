@@ -17,6 +17,7 @@ object AppLocale {
     const val SYSTEM = 0
     const val CHINESE = 1
     const val ENGLISH = 2
+    const val JAPANESE = 3
 
     private var deviceLocale: Locale? = null
 
@@ -31,6 +32,7 @@ object AppLocale {
         val locale = when (language) {
             CHINESE -> Locale.SIMPLIFIED_CHINESE
             ENGLISH -> Locale.ENGLISH
+            JAPANESE -> Locale.JAPANESE
             else -> systemLocale()
         }
         val configuration = Configuration(context.resources.configuration)
@@ -56,6 +58,7 @@ object AppLocale {
                 when (language) {
                     CHINESE -> setLocales(LocaleList(Locale.SIMPLIFIED_CHINESE))
                     ENGLISH -> setLocales(LocaleList(Locale.ENGLISH))
+                    JAPANESE -> setLocales(LocaleList(Locale.JAPANESE))
                     else -> setLocales(LocaleList(systemLocale()))
                 }
             }
