@@ -3,5 +3,6 @@
   "com.heytap.mydevices",
   "com.heytap.accessory",
   "com.oplus.wirelesssettings",
-  "com.huawei.smartaudio"
+  "com.huawei.smartaudio",
+  "com.oplus.melody"
 ]

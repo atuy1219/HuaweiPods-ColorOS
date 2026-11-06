@@ -60,7 +60,10 @@ open class HookEntry : XposedModule() {
                     loadHook("coloros-device-space-images", ColorOsDeviceSpaceHook, classLoader, packageName)
                     // seedling 卡片（控制中心里的设备卡片条）的数据模型在这里构建，卡片只有一个电量槽位。
                     loadHook("coloros-seedling-card", ColorOsSeedlingCardBatteryHook, classLoader, packageName)
+                    loadHook("coloros-native-widgets", ColorOsNativeWidgetHook, classLoader, packageName)
                 }
+                "com.oplus.melody" ->
+                    loadHook("coloros-melody-widgets", ColorOsNativeWidgetHook, classLoader, packageName)
                 "com.heytap.accessory" ->
                     loadHook("coloros-accessory", ColorOsAccessoryFrameworkHook, classLoader, packageName)
                 "com.android.settings" ->
@@ -100,6 +103,7 @@ open class HookEntry : XposedModule() {
     private fun supportsPackage(packageName: String): Boolean =
         packageName == "com.android.bluetooth" ||
             packageName == "com.heytap.mydevices" ||
+            packageName == "com.oplus.melody" ||
             packageName == "com.heytap.accessory" ||
             packageName == "com.oplus.wirelesssettings" ||
             packageName == "com.android.settings" ||
