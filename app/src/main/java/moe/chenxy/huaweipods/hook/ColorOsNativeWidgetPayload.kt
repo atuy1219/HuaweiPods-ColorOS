@@ -90,14 +90,17 @@ internal object ColorOsNativeWidgetPayload {
             "type" in element && ("connectState" in element || "shortcuts" in element)
         ) {
             val rawType = (fields["type"] as? JsonPrimitive)?.contentOrNull
-            // The OEM 4x2 Quick App uses the type to choose the widget renderer.
-            // A generic BT_DEVICE_A2DP card has no headphone shortcuts.
-            if (rawType in setOf(
+            val isOs17 = rawType?.startsWith("os17_") == true
+            val baseType = rawType?.removePrefix("os17_")
+            // The installed RPK uses os17_ prefixes for some native cards;
+            // preserve the prefix to retain the correct OS17 icon palette.
+            if (baseType in setOf(
                     "BT_DEVICE_A2DP", "BT_DEVICE_HEADSET", "BT_HEADSET",
                     "HEADSET_TWS", "HEADSET_OWS", "BT_AIRPODS_A2DP",
+                    "headset", "bt-airpods",
                 )
             ) {
-                fields["type"] = JsonPrimitive("HEADSET_OWS")
+                fields["type"] = JsonPrimitive(if (isOs17) "os17_HEADSET_OWS" else "HEADSET_OWS")
                 fields["shortcuts"] = JsonArray(
                     ColorOsFreeClipWidgetEqShortcuts.items(selectedEqId(pod)).map { shortcut ->
                         JsonObject(mapOf(

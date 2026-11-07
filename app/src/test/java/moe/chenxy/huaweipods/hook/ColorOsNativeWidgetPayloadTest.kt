@@ -56,6 +56,15 @@ class ColorOsNativeWidgetPayloadTest {
         })
     }
 
+    @Test fun os17PrefixedCardKeepsNativeTypePrefix() {
+        val json = """{"id":"f68a5d82181e48edd39eb1824f43c1fa","type":"os17_BT_DEVICE_A2DP","connectState":"CONNECTED","shortcuts":[]}"""
+        val out = ColorOsNativeWidgetPayload.rewrite(
+            json, listOf(freeClip), soundControlsEnabled = true,
+        )!!
+        assertTrue(out.contains("\\"type\\":\\"os17_HEADSET_OWS\\""))
+        assertTrue(out.contains("SOUND_EFFECT_LOW_SOUND_ENHANCE"))
+    }
+
     @Test fun noClickBridgeMeansNoNativeButtons() {
         val json = """{"id":"f68a5d82181e48edd39eb1824f43c1fa","type":"BT_DEVICE_A2DP","connectState":"CONNECTED","shortcuts":[]}"""
         assertNull(ColorOsNativeWidgetPayload.rewrite(json, listOf(freeClip)))
