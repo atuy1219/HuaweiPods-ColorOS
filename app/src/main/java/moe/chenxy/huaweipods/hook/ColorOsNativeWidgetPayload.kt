@@ -9,18 +9,24 @@ import kotlinx.serialization.json.contentOrNull
 
 /** Mutates OEM card data, never OEM widget registration, identities or click actions. */
 internal object ColorOsNativeWidgetPayload {
-    private val ids = setOf("deviceId", "device_id", "mac", "macAddress",
+    private val ids = setOf("id", "deviceId", "device_id", "mac", "macAddress",
         "bluetoothAddress", "deviceAddress", "address", "btAddress")
     private val battery = setOf("batteryLeft", "batteryRight", "batteryMain", "batteryMin", "batteryProgress")
     private val mac = Regex("(?:[0-9a-fA-F]{2}:){5}[0-9a-fA-F]{2}")
     private val hash = Regex("[0-9a-fA-F]{32}")
 
-    fun rewrite(raw: String, pods: List<ColorOsPodBattery>): String? {
+    fun rewrite(
+        raw: String,
+        pods: List<ColorOsPodBattery>,
+        soundControlsEnabled: Boolean = false,
+        selectedEqId: (ColorOsPodBattery) -> Int? = { null },
+        onFreeClipCard: (ColorOsPodBattery) -> Unit = {},
+    ): String? {
         if (pods.isEmpty() || raw.length > 131_072 ||
             !(raw.trimStart().startsWith("{") || raw.trimStart().startsWith("["))) return null
         return runCatching {
             val before = Json.parseToJsonElement(raw)
-            val after = rewriteElement(before, pods, null, 0)
+            val after = rewriteElement(before, pods, null, 0, soundControlsEnabled, selectedEqId, onFreeClipCard)
             if (after == before) null else after.toString()
         }.getOrNull()
     }
@@ -30,10 +36,13 @@ internal object ColorOsNativeWidgetPayload {
         pods: List<ColorOsPodBattery>,
         parent: ColorOsPodBattery?,
         depth: Int,
+        soundControlsEnabled: Boolean,
+        selectedEqId: (ColorOsPodBattery) -> Int?,
+        onFreeClipCard: (ColorOsPodBattery) -> Unit,
     ): JsonElement {
         if (depth >= 12) return element
         if (element is JsonArray) {
-            val items = element.map { rewriteElement(it, pods, parent, depth + 1) }
+            val items = element.map { rewriteElement(it, pods, parent, depth + 1, soundControlsEnabled, selectedEqId, onFreeClipCard) }
             return if (items == element) element else JsonArray(items)
         }
         if (element !is JsonObject) return element
@@ -75,9 +84,34 @@ internal object ColorOsNativeWidgetPayload {
                 }
             }
         }
+        if (pod != null && soundControlsEnabled &&
+            ColorOsNativeDeviceInfoPolicy.isOriginalFreeClip(pod.name) &&
+            ("id" in element || "deviceId" in element) &&
+            "type" in element && ("connectState" in element || "shortcuts" in element)
+        ) {
+            val rawType = (fields["type"] as? JsonPrimitive)?.contentOrNull
+            // The OEM 4x2 Quick App uses the type to choose the widget renderer.
+            // A generic BT_DEVICE_A2DP card has no headphone shortcuts.
+            if (rawType in setOf(
+                    "BT_DEVICE_A2DP", "BT_DEVICE_HEADSET", "BT_HEADSET",
+                    "HEADSET_TWS", "HEADSET_OWS", "BT_AIRPODS_A2DP",
+                )
+            ) {
+                fields["type"] = JsonPrimitive("HEADSET_OWS")
+                fields["shortcuts"] = JsonArray(
+                    ColorOsFreeClipWidgetEqShortcuts.items(selectedEqId(pod)).map { shortcut ->
+                        JsonObject(mapOf(
+                            "id" to JsonPrimitive(shortcut.id),
+                            "state" to JsonPrimitive(shortcut.selected),
+                        ))
+                    },
+                )
+                onFreeClipCard(pod)
+            }
+        }
         fields.toMap().forEach { (key, child) ->
             if (child is JsonObject || child is JsonArray) {
-                fields[key] = rewriteElement(child, pods, pod, depth + 1)
+                fields[key] = rewriteElement(child, pods, pod, depth + 1, soundControlsEnabled, selectedEqId, onFreeClipCard)
             }
         }
         return if (fields == element) element else JsonObject(fields)
