@@ -63,9 +63,10 @@ open class HookEntry : XposedModule() {
                     loadHook("coloros-native-widgets", ColorOsNativeWidgetHook, classLoader, packageName)
                     loadHook("coloros-native-device-model", ColorOsNativeDeviceInfoHook, classLoader, packageName)
                 }
-                "com.oplus.melody" ->
+                "com.oplus.melody" -> {
                     loadHook("coloros-melody-widgets", ColorOsNativeWidgetHook, classLoader, packageName)
                     loadHook("coloros-melody-device-model", ColorOsNativeDeviceInfoHook, classLoader, packageName)
+                }
                 "com.heytap.accessory" ->
                     loadHook("coloros-accessory", ColorOsAccessoryFrameworkHook, classLoader, packageName)
                 "com.android.settings" ->
