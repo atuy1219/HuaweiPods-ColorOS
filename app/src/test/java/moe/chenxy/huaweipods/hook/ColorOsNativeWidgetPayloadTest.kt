@@ -61,7 +61,8 @@ class ColorOsNativeWidgetPayloadTest {
         val out = ColorOsNativeWidgetPayload.rewrite(
             json, listOf(freeClip), soundControlsEnabled = true,
         )!!
-        assertTrue(out.contains("\\"type\\":\\"os17_HEADSET_OWS\\""))
+        val parsed = kotlinx.serialization.json.Json.parseToJsonElement(out) as kotlinx.serialization.json.JsonObject
+        assertEquals("os17_HEADSET_OWS", (parsed["type"] as kotlinx.serialization.json.JsonPrimitive).content)
         assertTrue(out.contains("SOUND_EFFECT_LOW_SOUND_ENHANCE"))
     }
 
