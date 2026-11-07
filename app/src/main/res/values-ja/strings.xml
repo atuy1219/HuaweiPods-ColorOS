@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">HuaweiPods ColorOS</string>
+    <string name="about_developer_name">ByteJuno</string>
     <string name="app_description">HUAWEIイヤホン向けColorOS統合モジュール</string>
     <string name="app_subtitle">HUAWEIイヤホンをColorOSに統合</string>
     <string name="coloros_live_alert_channel">イヤホンのライブ通知</string>
