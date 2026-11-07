@@ -61,9 +61,11 @@ open class HookEntry : XposedModule() {
                     // seedling 卡片（控制中心里的设备卡片条）的数据模型在这里构建，卡片只有一个电量槽位。
                     loadHook("coloros-seedling-card", ColorOsSeedlingCardBatteryHook, classLoader, packageName)
                     loadHook("coloros-native-widgets", ColorOsNativeWidgetHook, classLoader, packageName)
+                    loadHook("coloros-native-device-model", ColorOsNativeDeviceInfoHook, classLoader, packageName)
                 }
                 "com.oplus.melody" ->
                     loadHook("coloros-melody-widgets", ColorOsNativeWidgetHook, classLoader, packageName)
+                    loadHook("coloros-melody-device-model", ColorOsNativeDeviceInfoHook, classLoader, packageName)
                 "com.heytap.accessory" ->
                     loadHook("coloros-accessory", ColorOsAccessoryFrameworkHook, classLoader, packageName)
                 "com.android.settings" ->

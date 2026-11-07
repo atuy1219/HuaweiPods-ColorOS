@@ -7,6 +7,7 @@ internal object PodImageProviderAccessPolicy {
         "com.android.bluetooth",
         "com.heytap.accessory",
         "com.heytap.mydevices",
+        "com.oplus.melody",
     )
 
     fun mayOpenImage(callingPackage: String?): Boolean =

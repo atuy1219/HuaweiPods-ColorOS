@@ -20,6 +20,8 @@ internal object ColorOsNativeWidgetHook : HookContext() {
         ),
         "com.oplus.melody" to mapOf(
             "com.oplus.melody.card.MelodyCardWidgetProvider" to setOf("call"),
+            // Confirmed in the supplied Melody 17.6.6 classes2.dex.
+            "com.oplus.melody.mydevices.devicecard.MyDeviceProvider" to setOf("call"),
         ),
     )
     private var batterySource: ColorOsBatterySource? = null
